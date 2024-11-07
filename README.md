@@ -80,3 +80,108 @@ npx create-next-app@latest frontend
 npm run dev
 ```
 -  http://localhost:3000 선택하여 실행되면 설치 완료
+
+### 스프링부트와 NEXT.js와 소통하기 위한 세팅
+1. Proxy 설정
+- NEXT.js 프로젝트는 localhost:3000으로 열리고, 서버는 localhost:8080으로 열리기 때문에 origin이 달라진다. 그래서 CORS 에러가 발생하기 때문에 Proxy 설정을 해줘야한다. React 프로젝트의 package.json에서 proxy를 추가해준다. 
+```JSON
+"proxy": "http://localhost:8080/",
+```
+
+2. 스프링부트와 리액트간의 통신 테스트
+### 세팅을 하는 이유(프록시 설정을 통한 CORS 문제해결)
+- Next.js가 기본적으로 프론트엔드 역할을 하고, Spring Boot가 백엔드 API를 제공할 때, 두 서버는 서로 다른 포트에서 동작한다.(예: Next.js는 localhost:3000, Spring Boot는 localhost:8080). 이로 인해 CORS(Cross-Origin Resource Sharing) 문제가 발생할 수 있습니다.
+- CORS는 브라우저 보안 정책 때문에 발생하는 문제로, 프론트엔드가 다른 출처의 백엔드 API에 접근할 때 브라우저가 이를 제한합니다.
+
+#### 1) express, 미들웨어 설치
+- Express: Next.js의 커스텀 서버로 Express를 설정하여 프록시를 포함한 다양한 미들웨어 설정이 가능해진다.
+- http-proxy-middleware: 프록시 설정을 위한 미들웨어로, 프론트엔드의 요청을 Next.js 서버가 받고 백엔드로 전달하도록 만들어준다.
+
+```bash
+npm install @types/express @types/http-proxy-middleware --save-dev
+```
+
+- 경로 : src/main/frontend/src/app/setupProxy.tsx
+```js
+import { Application } from "express";
+import { createProxyMiddleware } from "http-proxy-middleware";
+
+module.exports = function (app: Application) {
+  app.use(
+    "/api",
+    createProxyMiddleware({
+      target: "http://localhost:8080", // 서버 URL or localhost:설정한포트번호
+      changeOrigin: true,
+    })
+  );
+};
+```
+
+#### 2) **axios** 설치
+- Axios는 JavaScript 라이브러리 중 하나인 Fetch api와 같은 비동기 통신 라이브러리 React ⇒ Axios를 더 많이 사용한다.
+- 특징 : 요청과 응답 모두 JSON 형식으로 자동 변환시켜준다!
+```bash
+# npm 설치
+npm install axios
+
+# yarn 설치
+yarn add axios
+```
+
+### 3) 스프링부트 CORS 정책 세팅
+- config/CorsConfig 경로
+```java
+@Configuration
+public class CorsConfig implements WebMvcConfigurer {
+  @Override
+  public void addCorsMappings(CorsRegistry registry) {
+    registry.addMapping("/**")
+        .allowedOrigins("http://localhost:3000") // 허용할 Origin 설정
+        .allowedMethods("GET", "POST", "PUT", "DELETE");
+  }
+}
+```
+
+### 연결 테스트 코드
+### Frontend 테스트 코드
+```js
+"use client";
+
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+
+export default function App() {
+  const [data, setData] = useState<string>("");
+  const [error, setError] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const resp = await axios.get("http://localhost:8080/api/data");
+        setData(resp.data);
+      } catch (err) {
+        console.error(`에러 발생 : ${err}`);
+        setError(err);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  return <div>받아온 데이터 : {data}</div>;
+}
+```
+
+### Backend 테스트 코드
+```java
+@Controller
+@RequestMapping("/api")
+public class HomeController {
+
+  @GetMapping("/data")
+  @ResponseBody
+  public String test() {
+    return "Hello World";
+  }
+}
+```
