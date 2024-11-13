@@ -1,0 +1,4 @@
+# DB 생성
+DROP DATABASE IF EXISTS sbb_qna;
+CREATE DATABASE sbb_qna;
+USE sbb_qna

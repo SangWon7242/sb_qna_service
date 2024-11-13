@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HomeController {
 
   @GetMapping("/data")
-  // HTTP GET 요청을 /api/data 경로에서 처리하도록 
+  // HTTP GET 요청을 /api/data 경로에서 처리하도록
   public String test() {
     return "안녕";
   }
