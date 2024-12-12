@@ -2,6 +2,7 @@ package com.psw.qna_service;
 
 import com.psw.qna_service.boundedContext.question.Question;
 import com.psw.qna_service.boundedContext.question.QuestionRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,15 @@ class QnaServiceApplicationTests {
   @Autowired // 필드 주입
   private QuestionRepository questionRepository;
 
-  @Test
-// @DisplayName : 테스트의 의도를 사람이 읽기 쉬운 설명 형태로 표시
-  @DisplayName("데이터 저장하기")
-  void t001() {
+  @BeforeEach // 아래 메서드는 각 테스트케이스가 실행되기 전에 실행
+  void beforeEach() {
+    // 모든 데이터 삭제
+    questionRepository.deleteAll();
+
+    // 흔적삭제(다음번 INSERT 때 id가 1번으로 설정되도록)
+    questionRepository.clearAutoIncrement();
+    
+    // 질문 두개 생성
     Question q1 = new Question();
     q1.setSubject("sbb가 무엇인가요?");
     q1.setContent("sbb에 대해서 알고 싶습니다.");
@@ -35,6 +41,19 @@ class QnaServiceApplicationTests {
     q2.setContent("id는 자동으로 생성되나요?");
     q2.setCreateDate(LocalDateTime.now());
     questionRepository.save(q2);  // 두번째 질문 저장
+  }
+
+  @Test
+// @DisplayName : 테스트의 의도를 사람이 읽기 쉬운 설명 형태로 표시
+  @DisplayName("데이터 저장하기")
+  void t001() {
+    Question q = new Question();
+    q.setSubject("겨울 제철 음식으로는 무엇을 먹어야 하나요?");
+    q.setContent("겨울 제철 음식 알려주세요.");
+    q.setCreateDate(LocalDateTime.now());
+    questionRepository.save(q);  // 두번째 질문 저장
+
+    assertEquals("겨울 제철 음식으로는 무엇을 먹어야 하나요?", questionRepository.findById(3).get().getSubject());
   }
 
   /*
@@ -125,6 +144,25 @@ class QnaServiceApplicationTests {
     Question q = oq.get();
     q.setSubject("수정된 제목");
     this.questionRepository.save(q);
+  }
+
+
+  /*
+  DELETE
+  FROM question
+  WHERE id = ?
+  */
+  @Test
+  @DisplayName("데이터 삭제하기")
+  void t008() {
+    // questionRepository.count()
+    // SQL : SELECT COUNT(*) FROM question;
+    assertEquals(2, questionRepository.count());
+    Optional<Question> oq = questionRepository.findById(1);
+    assertTrue(oq.isPresent());
+    Question q = oq.get();
+    questionRepository.delete(q);
+    assertEquals(1, questionRepository.count());
   }
 }
 
