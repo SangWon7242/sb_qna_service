@@ -33,4 +33,11 @@ public class Question {
   @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
   // OneToMany 에는 직접객체초기화
   private List<Answer> answerList = new ArrayList<>();
+  
+  // 객체 내부의 상태를 캡슐화 할 수 있다.
+  // 외부에서 컬렉션 필드로 접근하는 것을 차단
+  public void addAnswer(Answer a) {
+    a.setQuestion(this); // Question 객체에 Answer 추가
+    answerList.add(a); // Answer 객체에 Question 설정
+  }
 }

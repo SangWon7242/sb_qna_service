@@ -55,11 +55,10 @@ class QnaServiceApplicationTests {
     // 답변 1개 생성하기
     Answer a1 = new Answer();
     a1.setContent("네 자동으로 생성됩니다.");
-    a1.setQuestion(q2);
+    q2.addAnswer(a1); // 질문과 답변을 한 로직을 통해서 처리
+
     a1.setCreateDate(LocalDateTime.now());
     answerRepository.save(a1);
-
-    q2.getAnswerList().add(a1); // 조금 더 객체 지향적으로 변함
   }
 
   @Test
