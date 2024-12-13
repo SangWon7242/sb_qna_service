@@ -58,6 +58,8 @@ class QnaServiceApplicationTests {
     a1.setQuestion(q2);
     a1.setCreateDate(LocalDateTime.now());
     answerRepository.save(a1);
+
+    q2.getAnswerList().add(a1); // 조금 더 객체 지향적으로 변함
   }
 
   @Test
