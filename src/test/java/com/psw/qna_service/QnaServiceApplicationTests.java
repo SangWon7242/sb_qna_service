@@ -223,6 +223,13 @@ class QnaServiceApplicationTests {
     answerRepository.save(a);
   }
 
+  /*
+  select A.*, Q.*
+  FROM answer AS A
+  LEFT JOIN question AS Q
+  ON Q.id = A.question_id
+  WHERE A.id = ?
+  */
   @Test
   @DisplayName("답변 조회하기")
   void t010() {
@@ -239,11 +246,14 @@ class QnaServiceApplicationTests {
   @Test
   @DisplayName("질문을 통해 답변 찾기")
   void t011() {
+    // SELECT * FROM question WHERE id = 2;
     Optional<Question> oq = questionRepository.findById(2);
     assertTrue(oq.isPresent());
     Question q = oq.get();
+    // 테스트 환경에서는 get해서 가져온 뒤 DB 연결을 끊음
 
-    List<Answer> answerList = q.getAnswerList();
+    // SELECT * FROM answer WHERE question_id = 2;
+    List<Answer> answerList = q.getAnswerList(); // DB 통신이 끊긴 뒤 answer를 가져옴 => 실패
 
     assertEquals(1, answerList.size());
     assertEquals("네 자동으로 생성됩니다.", answerList.get(0).getContent());
