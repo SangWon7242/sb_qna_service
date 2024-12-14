@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -243,6 +244,7 @@ class QnaServiceApplicationTests {
   // findById 메서드 실행하고 나면 DB가 끝어지기 때문에
   // @Transactional 애너테이션을 사용하면 메서드가 종료될 때까지 DB 세션이 유지된다.
   @Transactional
+  @Rollback(false)
   @Test
   @DisplayName("질문을 통해 답변 찾기")
   void t011() {
