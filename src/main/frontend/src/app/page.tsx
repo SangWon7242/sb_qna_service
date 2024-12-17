@@ -1,35 +1,17 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import Link from "next/link";
 
-export default function App() {
-  const [data, setData] = useState<Array<String>>([]);
-  const [error, setError] = useState<Error | null>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const resp = await axios.get("/api/home");
-        setData(resp.data);
-      } catch (err) {
-        console.error(`에러 발생 : ${err}`);
-        setError(err as Error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
+export default function Home() {
   return (
     <div>
-      <ul>
-        {data.map((value, index) => (
-          <li key={index}>
-            {index + 1} : {value}
-          </li>
-        ))}
-      </ul>
+      <Link href="/">
+        <button>홈 페이지 이동</button>
+      </Link>
+      &nbsp;
+      <Link href="/question/list">
+        <button>리스트 페이지로 이동</button>
+      </Link>
     </div>
   );
 }
