@@ -1,22 +1,22 @@
 <h1>질문 리스트</h1>
 
-[[${questionList}]]
-
 <table border="1">
   <thead>
-  <tr>
-    <th>제목</th>
-    <th>작성일시</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr>
-    <td>sbb가 무엇인가요?</td>
-    <td>2023-03-21 16:45:03.003623</td>
-  </tr>
-  <tr>
-    <td>스프링부트 모델 질문입니다.</td>
-    <td>2023-03-21 16:45:03.010691</td>
-  </tr>
+    <tr>
+      <th>제목</th>
+      <th>작성일시</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td th:text="${questionList[1].id}"></td>
+      <td th:text="${questionList[1].subject}"></td>
+      <td th:text="${questionList[1].createDate}"></td>
+    </tr>
+    <tr>
+      <td>[[${questionList[0].id}]]</td>
+      <td>[[${questionList[0].subject}]]</td>
+      <td>[[${questionList[0].createDate}]]</td>
+    </tr>
   </tbody>
 </table>
