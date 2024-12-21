@@ -23,6 +23,7 @@ public class AnswerController {
     Question question = questionService.getQuestion(id);
 
     // TODO: 답변을 저장한다.
-    return String.format("redirect:/question/detail/%s", id);
+    // return "redirect:/question/detail/%s".formatted(id);
+    return "question_detail";
   }
 }
