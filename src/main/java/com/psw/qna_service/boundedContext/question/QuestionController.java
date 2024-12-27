@@ -1,5 +1,6 @@
 package com.psw.qna_service.boundedContext.question;
 
+import com.psw.qna_service.boundedContext.answer.AnswerForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -25,11 +26,12 @@ public class QuestionController {
     return "question_list";
   }
 
-  @GetMapping(value = "/detail/{id}")
-  public String detail(Model model, @PathVariable("id") Integer id) {
+  @GetMapping("/detail/{id}")
+  public String detail(Model model, @PathVariable("id") Integer id,  AnswerForm answerForm) {
     Question question = questionService.getQuestion(id);
 
     model.addAttribute("question", question);
+    model.addAttribute("answerForm", answerForm);
 
     return "question_detail";
   }
@@ -56,4 +58,5 @@ public class QuestionController {
     return "redirect:/question/list"; // 질문 저장후 질문목록으로 이동
   }
 }
+
 

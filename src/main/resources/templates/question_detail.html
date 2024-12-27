@@ -32,7 +32,7 @@
   <!-- 답변 반복 끝  -->
 
   <!-- 답변 작성 -->
-  <form th:action="@{|/answer/create/${question.id}|}" method="post" class="my-3">
+  <form th:action="@{|/answer/create/${question.id}|}" th:object="${answerForm}" method="post" class="my-3">
     <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
       <div th:each="err : ${#fields.allErrors()}" th:text="${err}" />
     </div>
