@@ -1,5 +1,6 @@
 <html layout:decorate="~{layout}">
   <div layout:fragment="content" class="container my-3">
+    <!--
     <table class="table">
       <thead class="table-dark">
         <tr>
@@ -63,6 +64,7 @@
     </table>
 
     <hr>
+    -->
 
     <table class="table">
       <thead class="table-dark">
@@ -75,7 +77,8 @@
       <tbody>
       <tr th:each="q, loop : ${paging}">
         <td>
-          <a th:text="${loop.count}" th:href="@{|/question/detail/${q.id}|}"></a>
+<!--          <a th:text="${q.id}" th:href="@{|/question/detail/${q.id}|}"></a>-->
+          <a th:text="${paging.totalElements}" th:href="@{|/question/detail/${q.id}|}"></a>
         </td>
         <td>
           <a th:text="${q.subject}" th:href="@{|/question/detail/${q.id}|}"></a>
