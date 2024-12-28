@@ -1,6 +1,5 @@
 package com.psw.qna_service.boundedContext.question;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
