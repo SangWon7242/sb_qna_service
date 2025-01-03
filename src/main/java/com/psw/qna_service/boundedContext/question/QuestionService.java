@@ -1,5 +1,6 @@
 package com.psw.qna_service.boundedContext.question;
 
+import com.psw.qna_service.boundedContext.user.SiteUser;
 import com.psw.qna_service.exception.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -31,11 +32,11 @@ public class QuestionService {
     return oq.get();
   }
 
-  public Question create(String subject, String content) {
-
+  public Question create(String subject, String content, SiteUser author) {
     Question q = new Question();
     q.setSubject(subject);
     q.setContent(content);
+    q.setAuthor(author);
     q.setCreateDate(LocalDateTime.now());
     questionRepository.save(q);
 

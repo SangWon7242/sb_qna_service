@@ -1,6 +1,7 @@
 package com.psw.qna_service.boundedContext.answer;
 
 import com.psw.qna_service.boundedContext.question.Question;
+import com.psw.qna_service.boundedContext.user.SiteUser;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,4 +26,7 @@ public class Answer {
   @ManyToOne
   @ToString.Exclude // ToString 대상에서 제외
   private Question question;
+
+  @ManyToOne
+  private SiteUser author;
 }
