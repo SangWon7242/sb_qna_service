@@ -9,21 +9,32 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
   @Bean
   SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http/*
-                .authorizeHttpRequests(
-                        authorizeHttpRequests -> authorizeHttpRequests
-                                .requestMatchers(new AntPathRequestMatcher("/question/list")).permitAll() / /question/list는 인증 없이 접근 가능
-                )
-                */
+    http
+        .authorizeHttpRequests(
+            authorizeHttpRequests -> authorizeHttpRequests
+                .requestMatchers(new AntPathRequestMatcher("/question/list")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/question/detail/**")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/user/login")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/style.css")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
+                .anyRequest().authenticated() // 그 외의 요청은 인증 필요
+        )
         .formLogin(
             formLogin -> formLogin
+                // GET
+                // 시큐리티에게 우리가 만든 로그인 페이지 url을 알려준다.
+                // 만약에 하지 않으면 기본 로그인 페이지 url은 /login 이다.
                 .loginPage("/user/login") // 사용자 정의 로그인 페이지
+
+                // POST
+                // 시큐리티에게 로그인 폼 처리 url을 알려준다.
                 .loginProcessingUrl("/user/login") // 로그인 처리 요청 경로
                 .defaultSuccessUrl("/") // 로그인 성공 시 리다이렉트 경로
         );
@@ -40,8 +51,8 @@ public class SecurityConfig {
   }
 
   @Bean
-  // 스프링 시큐리티의 인증을 처리
-  // 커스텀 인증 로직을 구현할 때 필요
+    // 스프링 시큐리티의 인증을 처리
+    // 커스텀 인증 로직을 구현할 때 필요
   AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
     return authenticationConfiguration.getAuthenticationManager();
   }
