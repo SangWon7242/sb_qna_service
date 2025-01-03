@@ -92,7 +92,7 @@
       </tbody>
     </table>
 
-    <nav aria-label="Page navigation example">
+    <nav aria-label="Page navigation example" class="d-flex justify-content-center">
       <ul class="pagination" th:if="${!paging.isEmpty()}">
         <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
           <a class="page-link" th:href="@{|?page=${paging.number - 1}|}">
