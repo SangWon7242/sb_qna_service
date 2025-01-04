@@ -22,6 +22,7 @@ public class Answer {
   private String content;
 
   private LocalDateTime createDate; // DATETIME
+  private LocalDateTime modifyDate;
 
   @ManyToOne
   @ToString.Exclude // ToString 대상에서 제외

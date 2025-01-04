@@ -2,6 +2,8 @@ package com.psw.qna_service.boundedContext.question;
 
 import com.psw.qna_service.boundedContext.user.SiteUser;
 import com.psw.qna_service.exception.DataNotFoundException;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -49,5 +51,12 @@ public class QuestionService {
 
     Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
     return questionRepository.findAll(pageable);
+  }
+
+  public void modify(Question question, String subject, String content) {
+    question.setSubject(subject);
+    question.setContent(content);
+    question.setModifyDate(LocalDateTime.now());
+    questionRepository.save(question);
   }
 }
