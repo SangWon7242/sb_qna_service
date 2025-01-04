@@ -1,6 +1,7 @@
 package com.psw.qna_service.boundedContext.question;
 
 import com.psw.qna_service.boundedContext.user.SiteUser;
+import com.psw.qna_service.boundedContext.user.UserRepository;
 import com.psw.qna_service.exception.DataNotFoundException;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -20,6 +21,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class QuestionService {
   private final QuestionRepository questionRepository;
+  private final UserRepository userRepository;
 
   public List<Question> findAll() {
     return questionRepository.findAll();
@@ -62,5 +64,10 @@ public class QuestionService {
 
   public void delete(Question question) {
     questionRepository.delete(question);
+  }
+
+  public void vote(Question question, SiteUser voter) {
+    question.addVoter(voter);
+    questionRepository.save(question);
   }
 }
