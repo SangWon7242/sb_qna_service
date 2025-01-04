@@ -74,7 +74,18 @@ class QnaServiceApplicationTests {
     // 답변 1개 생성하기
     Answer a1 = answerService.create(q2, "네 자동으로 생성됩니다.", user2);
 
-    a1.setCreateDate(LocalDateTime.now());
+    // 1번 질문에 2명의 회원이 추천을 한다.
+    // user1 (이)가 q1 (을)를 추천했다.
+    q1.addVoter(user1);
+    q1.addVoter(user2);
+    questionRepository.save(q1);
+
+    q2.addVoter(user1);
+    q2.addVoter(user2);
+    questionRepository.save(q2);
+
+    a1.addVoter(user1);
+    a1.addVoter(user2);
     answerRepository.save(a1);
   }
 
@@ -250,7 +261,7 @@ class QnaServiceApplicationTests {
   @Test
   @DisplayName("답변 조회하기")
   void t010() {
-    Optional<Answer> oa = answerRepository.findById(1L);
+    Optional<Answer> oa = answerRepository.findById(1);
     assertTrue(oa.isPresent());
     Answer a = oa.get();
     assertEquals(2, a.getQuestion().getId());
