@@ -50,7 +50,7 @@ public class AnswerController {
     // 단 적절한 if 문을 사용하면 유용한 방법이 될 수 도 있다. 즉 머무는게 좋은 경우도 있음
     // return "%d번 질문에 대한 답변이 생성되었습니다.(답변번호 : %d)".formatted(id, answer.getId());
 
-    return "redirect:/question/detail/%s".formatted(id);
+    return "redirect:/question/detail/%d#answer_%d".formatted(id, answer.getId());
   }
 
   @PreAuthorize("isAuthenticated()")
@@ -79,7 +79,7 @@ public class AnswerController {
     }
 
     answerService.modify(answer, answerForm.getContent());
-    return "redirect:/question/detail/%d".formatted(answer.getQuestion().getId());
+    return "redirect:/question/detail/%d#answer_%d".formatted(answer.getQuestion().getId(), answer.getId());
   }
 
   @PreAuthorize("isAuthenticated()")
@@ -100,6 +100,6 @@ public class AnswerController {
     SiteUser siteUser = userService.getUser(principal.getName());
 
     answerService.vote(answer, siteUser);
-    return "redirect:/question/detail/%d".formatted(answer.getQuestion().getId());
+    return "redirect:/question/detail/%d#answer_%d".formatted(answer.getQuestion().getId(), answer.getId());
   }
 }
